@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
 
-<h3>testing</h3>
+<h3>Email Builder</h3>
 
 @stop
