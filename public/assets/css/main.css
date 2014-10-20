@@ -1,0 +1,22 @@
+.active {
+	color: #fff;
+}
+
+#css_ace {
+	border-radius: 4px;
+	height: 200px;
+}
+#code_ace {
+	border-radius: 4px;
+	height: 300px;
+}
+
+
+/* Footer */
+.footer {
+	text-align: center;
+	font-size: 0.9em;
+	color: #ddd;
+	padding: 40px 0 0 0;
+}
+
