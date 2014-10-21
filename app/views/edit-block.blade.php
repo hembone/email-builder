@@ -43,6 +43,11 @@
 				@endforeach
 			</select>
 		</div>
+		@if (isset($block))
+		<div class="form-group">
+			<button onclick="$('#confirm_modal').modal('show');" class="btn btn-danger btn-block" type="button"><i class="fa fa-trash"></i> Delete Block</button>
+		</div>
+		@endif
 		<div class="form-group">
 			<button class="btn btn-primary btn-block" type="submit"><i class="fa fa-check"></i> Save Block</button>
 		</div>
@@ -51,6 +56,28 @@
 </form>
 
 </div><!-- end .container-fluid -->
+
+<div id="confirm_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Are you sure?</h4>
+			</div>
+			<div class="modal-body">
+				<div class="col-sm-6">
+					<button type="button" class="btn btn-danger btn-block" data-dismiss="modal"><i class="fa fa-ban"></i> No Way!</button>
+				</div>
+				<div class="col-sm-6">
+					<form method="post" action="/delete-block">
+					<input name="delete_id" type="hidden" value="{{ isset($block->id)?$block->id:'' }}">
+					<button type="submit" class="btn btn-success btn-block"><i class="fa fa-check"></i> Yes</button>
+					</form>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
 
 @stop
 

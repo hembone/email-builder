@@ -22,12 +22,34 @@
 	<div style="display:none;" id="blocks_container"></div>
 </div>
 <div class="col-md-3">
-	<a class="btn btn-primary btn-block" href="new-block"><i class="fa fa-plus"></i> New Block</a>
-	<a class="btn btn-default btn-block" href="edit-categories"><i class="fa fa-pencil"></i> Edit Categories</a>
-	<a class="btn btn-default btn-block" href="edit-brands"><i class="fa fa-pencil"></i> Edit Brands</a>
+	<a class="btn btn-success btn-block" href="/new-block"><i class="fa fa-plus"></i> New Block</a>
+	<a class="btn btn-default btn-block" href="/categories"><i class="fa fa-pencil"></i> Edit Categories</a>
+	<a class="btn btn-default btn-block" href="/brands"><i class="fa fa-pencil"></i> Edit Brands</a>
 </div>
 
 </div><!-- end .container-fluid -->
+
+<div id="confirm_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Are you sure?</h4>
+			</div>
+			<div class="modal-body">
+				<div class="col-sm-6">
+					<button type="button" class="btn btn-danger btn-block" data-dismiss="modal"><i class="fa fa-ban"></i> No Way!</button>
+				</div>
+				<div class="col-sm-6">
+					<form method="post" action="/delete-block">
+					<input id="delete_id" name="delete_id" type="hidden">
+					<button type="submit" class="btn btn-success btn-block"><i class="fa fa-check"></i> Yes</button>
+					</form>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
 
 @stop
 
@@ -62,8 +84,9 @@ var MANAGE = {
 	display : function(blocks) {
 		var html = '';
 		$.each(blocks, function(index, block) {
-			var block_div = '<div id="block_'+block.id+'" class="block_wrap">';
-			block_div += '<a class="btn btn-primary btn-xs pull-right" href="/edit-block/'+block.id+'"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-danger btn-xs pull-right" href="/delete-block/'+block.id+'"><i class="fa fa-trash"></i></a>'
+			var block_div = '<div class="block_name">'+block.name+'</div>';
+			block_div += '<div id="block_'+block.id+'" class="block_wrap">';
+			block_div += '<div class="block_controls"><button onclick="MANAGE.setId('+block.id+')" data-toggle="modal" data-target="#confirm_modal" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button><a class="btn btn-primary btn-xs" href="/edit-block/'+block.id+'"><i class="fa fa-pencil"></i> Edit</a></div>';
 			block_div += '<iframe id="iframe_'+block.id+'"></iframe>';
 			block_div += '</div>';
 			html += block_div;
@@ -77,6 +100,10 @@ var MANAGE = {
 			doc.close();
 		});
 		$('#blocks_container').fadeIn();
+	},
+
+	setId : function(id) {
+		$('#delete_id').val(id);
 	}
 
 };

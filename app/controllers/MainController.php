@@ -56,9 +56,20 @@ class MainController extends BaseController {
 		return Redirect::to('manage')->with('success', 'Block saved successfully!');
 	}
 
+	public function postDeleteBlock()
+	{
+		$block = Block::find(Input::get('delete_id'));
+		$block->delete();
+		return Redirect::to('manage')->with('success', 'Block deleted successfully!');
+	}
+
 	public function getCategories()
 	{
-
+		View::share('title', 'Edit Categories');
+		$data['success'] = Session::get('success', false);
+		$data['fail'] = Session::get('fail', false);
+		$data['categories'] = Category::all();
+		return View::make('categories', $data);
 	}
 
 	public function postEditCategory()
