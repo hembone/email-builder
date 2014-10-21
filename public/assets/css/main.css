@@ -2,6 +2,18 @@
 	color: #fff;
 }
 
+/* Manage */
+#blocks_container iframe {
+	border: 0;
+	width: 100%;
+}
+#blocks_container .block_wrap {
+	border: 1px solid #ddd;
+	margin: 10px 0;
+	position: relative;
+}
+
+/* Edit Block */
 #css_ace {
 	border-radius: 4px;
 	height: 200px;
@@ -10,7 +22,6 @@
 	border-radius: 4px;
 	height: 300px;
 }
-
 
 /* Footer */
 .footer {

@@ -23,8 +23,8 @@
 </div>
 <div class="col-md-3">
 	<a class="btn btn-primary btn-block" href="new-block"><i class="fa fa-plus"></i> New Block</a>
-	<a class="btn btn-default btn-block" href="edit-categories"><i class="fa fa-cog"></i> Edit Categories</a>
-	<a class="btn btn-default btn-block" href="edit-brands"><i class="fa fa-cog"></i> Edit Brands</a>
+	<a class="btn btn-default btn-block" href="edit-categories"><i class="fa fa-pencil"></i> Edit Categories</a>
+	<a class="btn btn-default btn-block" href="edit-brands"><i class="fa fa-pencil"></i> Edit Brands</a>
 </div>
 
 </div><!-- end .container-fluid -->
@@ -63,11 +63,20 @@ var MANAGE = {
 		var html = '';
 		$.each(blocks, function(index, block) {
 			var block_div = '<div id="block_'+block.id+'" class="block_wrap">';
+			block_div += '<a class="btn btn-primary btn-xs pull-right" href="/edit-block/'+block.id+'"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-danger btn-xs pull-right" href="/delete-block/'+block.id+'"><i class="fa fa-trash"></i></a>'
 			block_div += '<iframe id="iframe_'+block.id+'"></iframe>';
 			block_div += '</div>';
 			html += block_div;
 		});
-		$('#blocks_container').html(html).fadeIn();
+		$('#blocks_container').html(html);
+		$.each(blocks, function(index, block) {
+			var doc = document.getElementById('iframe_'+block.id).contentWindow.document;
+			doc.open();
+			doc.write('<style>'+block.css+'</style>');
+			doc.write(block.code);
+			doc.close();
+		});
+		$('#blocks_container').fadeIn();
 	}
 
 };
