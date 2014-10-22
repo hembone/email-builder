@@ -20,13 +20,22 @@
 
 <div class="col-md-9">
 	@foreach ($categories as $category)
-	<div id="brand_{{ $category->id }}">{{ $category->name }}</div>
+	<div class="">
+		{{ $category->name }}
+
+
+	</div>
 	@endforeach
 </div>
 <div class="col-md-3">
-	<a class="btn btn-success btn-block" href="new-block"><i class="fa fa-plus"></i> New Block</a>
-	<a class="btn btn-default btn-block" href="edit-categories"><i class="fa fa-pencil"></i> Edit Categories</a>
-	<a class="btn btn-default btn-block" href="edit-brands"><i class="fa fa-pencil"></i> Edit Brands</a>
+	<form method="post" action="/edit-category">
+		<div class="form-group">
+			<input class="form-control" type="text" name="name" placeholder="New Category">
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary btn-block" type="submit"><i class="fa fa-plus"></i> Save Category</button>
+		</div>
+	</form>
 </div>
 
 </div><!-- end .container-fluid -->

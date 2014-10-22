@@ -53,14 +53,14 @@ class MainController extends BaseController {
 		$block->css = Input::get('css');
 		$block->code = Input::get('code');
 		$block->save();
-		return Redirect::to('manage')->with('success', 'Block saved successfully!');
+		return Redirect::to('/manage')->with('success', 'Block saved successfully!');
 	}
 
 	public function postDeleteBlock()
 	{
 		$block = Block::find(Input::get('delete_id'));
 		$block->delete();
-		return Redirect::to('manage')->with('success', 'Block deleted successfully!');
+		return Redirect::to('/manage')->with('success', 'Block deleted successfully!');
 	}
 
 	public function getCategories()
@@ -74,7 +74,14 @@ class MainController extends BaseController {
 
 	public function postEditCategory()
 	{
-
+		if(Input::get('category_id')) {
+			$category = Category::find(Input::get('category_id'));
+		} else {
+			$category = new Category;
+		}
+		$category->name = Input::get('name');
+		$category->save();
+		return Redirect::to('/categories')->with('success', 'Category saved successfully!');
 	}
 
 	public function getBrands()
