@@ -19,7 +19,9 @@
 @endif
 
 <div class="col-md-9">
-	<div style="display:none;" id="blocks_container"></div>
+	@foreach ($categories as $category)
+	<div id="brand_{{ $category->id }}">{{ $category->name }}</div>
+	@endforeach
 </div>
 <div class="col-md-3">
 	<a class="btn btn-success btn-block" href="new-block"><i class="fa fa-plus"></i> New Block</a>

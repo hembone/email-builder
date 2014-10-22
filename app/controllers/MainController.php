@@ -79,7 +79,11 @@ class MainController extends BaseController {
 
 	public function getBrands()
 	{
-
+		View::share('title', 'Edit Brands');
+		$data['success'] = Session::get('success', false);
+		$data['fail'] = Session::get('fail', false);
+		$data['brands'] = Brand::all();
+		return View::make('brands', $data);
 	}
 
 	public function postEditBrand()
