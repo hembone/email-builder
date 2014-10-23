@@ -84,6 +84,13 @@ class MainController extends BaseController {
 		return Redirect::to('/categories')->with('success', 'Category saved successfully!');
 	}
 
+	public function postDeleteCategory()
+	{
+		$category = Category::find(Input::get('delete_id'));
+		$category->delete();
+		return Redirect::to('/categories')->with('success', 'Category deleted successfully!');
+	}
+
 	public function getBrands()
 	{
 		View::share('title', 'Edit Brands');
@@ -95,7 +102,21 @@ class MainController extends BaseController {
 
 	public function postEditBrand()
 	{
+		if(Input::get('brand_id')) {
+			$brand = Brand::find(Input::get('brand_id'));
+		} else {
+			$brand = new Brand;
+		}
+		$brand->name = Input::get('name');
+		$brand->save();
+		return Redirect::to('/brands')->with('success', 'Brand saved successfully!');
+	}
 
+	public function postDeleteBrand()
+	{
+		$brand = Brand::find(Input::get('delete_id'));
+		$brand->delete();
+		return Redirect::to('/brands')->with('success', 'Brand deleted successfully!');
 	}
 
 }

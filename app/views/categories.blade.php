@@ -20,20 +20,40 @@
 
 <div class="col-md-9">
 	@foreach ($categories as $category)
-	<div class="">
-		{{ $category->name }}
-
-
+	<div class="category_box">
+		<div id="category_{{ $category->id }}">
+			<span>{{ $category->name }}</span>
+			<div class="category_controls">
+				<button class="btn btn-danger btn-sm" onclick="CAT.setId({{ $category->id }});" data-toggle="modal" data-target="#confirm_modal"><i class="fa fa-trash"></i></button>
+				<button class="btn btn-primary btn-sm" onclick="CAT.edit({{ $category->id }});"><i class="fa fa-pencil"></i> Edit</button>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div style="display:none;" id="form_{{ $category->id }}">
+			<form class="form-inline pull-left" method="post" action="/edit-category">
+				<input type="hidden" name="category_id" value="{{ $category->id }}">
+				<div class="form-group">
+					<input class="form-control input-sm" type="text" name="name" value="{{ $category->name }}">
+				</div>
+				<div class="form-group">
+					<button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-check"></i> Save Category</button>
+				</div>
+			</form>
+			<div class="category_controls">
+				<button class="btn btn-default btn-sm" onclick="CAT.cancelEdit({{ $category->id }});"><i class="fa fa-close"></i> Cancel</button>
+			</div>
+			<div class="clearfix"></div>
+		</div>
 	</div>
 	@endforeach
 </div>
 <div class="col-md-3">
 	<form method="post" action="/edit-category">
 		<div class="form-group">
-			<input class="form-control" type="text" name="name" placeholder="New Category">
+			<input class="form-control" type="text" name="name" placeholder="Category Name...">
 		</div>
 		<div class="form-group">
-			<button class="btn btn-primary btn-block" type="submit"><i class="fa fa-plus"></i> Save Category</button>
+			<button class="btn btn-success btn-block" type="submit"><i class="fa fa-plus"></i> Create Category</button>
 		</div>
 	</form>
 </div>
@@ -65,5 +85,27 @@
 @stop
 
 @section('scripts')
+
+<script>
+
+var CAT = {
+
+	edit : function(id) {
+		$('#category_'+id).hide();
+		$('#form_'+id).fadeIn();
+	},
+
+	cancelEdit : function(id) {
+		$('#form_'+id).hide();
+		$('#category_'+id).fadeIn();
+	},
+
+	setId : function(id) {
+		$('#delete_id').val(id);
+	}
+
+};
+
+</script>
 
 @stop
