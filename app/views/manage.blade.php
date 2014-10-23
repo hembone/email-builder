@@ -85,9 +85,9 @@ var MANAGE = {
 		var html = '';
 		$.each(blocks, function(index, block) {
 			var block_div = '<div class="block_name">'+block.name+'</div>';
-			block_div += '<div id="block_'+block.id+'" class="block_wrap">';
+			block_div += '<div id="'+block.id+'" class="block_wrap">';
 			block_div += '<div class="block_controls"><button onclick="MANAGE.setId('+block.id+')" data-toggle="modal" data-target="#confirm_modal" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button><a class="btn btn-primary btn-xs" href="/edit-block/'+block.id+'"><i class="fa fa-pencil"></i> Edit</a></div>';
-			block_div += '<iframe id="iframe_'+block.id+'"></iframe>';
+			block_div += '<iframe id="iframe_'+block.id+'" scrolling="no" seamless="seamless"></iframe>';
 			block_div += '</div>';
 			html += block_div;
 		});
@@ -100,6 +100,24 @@ var MANAGE = {
 			doc.close();
 		});
 		$('#blocks_container').fadeIn();
+		MANAGE.setListeners();
+	},
+
+	setListeners : function() {
+		$('.block_wrap').on('mouseover', function() {
+			var blockId = this.id;
+			var height = $('#iframe_'+blockId).contents().find('html').height();
+			console.log(height);
+			$('#iframe_'+blockId).animate({
+				height: height
+			}, 300);
+		});
+		$('.block_wrap').on('mouseout', function() {
+			var blockId = this.id;
+			$('#iframe_'+blockId).animate({
+				height: '100px'
+			}, 300);
+		});
 	},
 
 	setId : function(id) {

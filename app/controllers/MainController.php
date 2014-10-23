@@ -13,29 +13,28 @@ class MainController extends BaseController {
 		View::share('title', 'Manage');
 		$data['success'] = Session::get('success', false);
 		$data['fail'] = Session::get('fail', false);
-		$data['blocks'] = Block::all();
 		return View::make('manage', $data);
 	}
 
 	public function postBlocks()
 	{
-		$blocks = Block::all();
+		$blocks = Block::orderBy('name')->get();
 		echo json_encode($blocks);
 	}
 
 	public function getNewBlock()
 	{
 		View::share('title', 'New Block');
-		$data['categories'] = Category::all();
-		$data['brands'] = Brand::all();
+		$data['categories'] = Category::orderBy('name')->get();
+		$data['brands'] = Brand::orderBy('name')->get();
 		return View::make('edit-block', $data);
 	}
 
 	public function getEditBlock($id)
 	{
 		View::share('title', 'Edit Block');
-		$data['categories'] = Category::all();
-		$data['brands'] = Brand::all();
+		$data['categories'] = Category::orderBy('name')->get();
+		$data['brands'] = Brand::orderBy('name')->get();
 		$data['block'] = Block::find($id);
 		return View::make('edit-block', $data);
 	}
@@ -68,7 +67,7 @@ class MainController extends BaseController {
 		View::share('title', 'Edit Categories');
 		$data['success'] = Session::get('success', false);
 		$data['fail'] = Session::get('fail', false);
-		$data['categories'] = Category::all();
+		$data['categories'] = Category::orderBy('name')->get();
 		return View::make('categories', $data);
 	}
 
@@ -96,7 +95,7 @@ class MainController extends BaseController {
 		View::share('title', 'Edit Brands');
 		$data['success'] = Session::get('success', false);
 		$data['fail'] = Session::get('fail', false);
-		$data['brands'] = Brand::all();
+		$data['brands'] = Brand::orderBy('name')->get();
 		return View::make('brands', $data);
 	}
 

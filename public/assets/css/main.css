@@ -6,6 +6,8 @@
 #blocks_container iframe {
 	border: 0;
 	width: 100%;
+	height: 100px;
+	overflow: hidden;
 }
 #blocks_container .block_name {
 	background: #eee;

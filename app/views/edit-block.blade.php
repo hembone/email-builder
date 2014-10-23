@@ -8,15 +8,17 @@
 <form id="new_block_form" role="form" method="post" action="edit-block">
 
 	<div class="col-md-8">
-		<div class="form-group">
-			<label for="name">CSS</label>
-			<div id="css_ace">{{ isset($block->css)?$block->css:'' }}</div>
-			<textarea style="display:none;" id="css" name="css">{{ isset($block->css)?$block->css:'' }}</textarea>
-		</div>
-		<div class="form-group">
-			<label for="name">HTML</label>
-			<div id="code_ace">{{ isset($block->code)?$block->code:'' }}</div>
-			<textarea style="display:none;" id="code" name="code">{{ isset($block->code)?$block->code:'' }}</textarea>
+		<div style="display:none;" id="edit_box">
+			<div class="form-group">
+				<label for="name">CSS</label>
+				<div id="css_ace">{{ isset($block->css)?$block->css:'' }}</div>
+				<textarea style="display:none;" id="css" name="css">{{ isset($block->css)?$block->css:'' }}</textarea>
+			</div>
+			<div class="form-group">
+				<label for="name">HTML</label>
+				<div id="code_ace">{{ isset($block->code)?$block->code:'' }}</div>
+				<textarea style="display:none;" id="code" name="code">{{ isset($block->code)?$block->code:'' }}</textarea>
+			</div>
 		</div>
 	</div>
 	<div class="col-md-4">
@@ -90,6 +92,8 @@
 $(function() {
 
 	BLOCK.init();
+
+	$('#edit_box').fadeIn();
 
 });
 
