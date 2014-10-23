@@ -107,13 +107,14 @@ var MANAGE = {
 		$('.block_wrap').on('mouseover', function() {
 			var blockId = this.id;
 			var height = $('#iframe_'+blockId).contents().find('html').height();
-			console.log(height);
+			$('#iframe_'+blockId).clearQueue();
 			$('#iframe_'+blockId).animate({
 				height: height
 			}, 300);
 		});
 		$('.block_wrap').on('mouseout', function() {
 			var blockId = this.id;
+			$('#iframe_'+blockId).clearQueue();
 			$('#iframe_'+blockId).animate({
 				height: '100px'
 			}, 300);
