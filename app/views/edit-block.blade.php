@@ -1,4 +1,9 @@
 @extends('layouts.master')
+
+@section('styles')
+
+@stop
+
 @section('content')
 
 <div class="container-fluid">
@@ -50,6 +55,9 @@
 			<button onclick="$('#confirm_modal').modal('show');" class="btn btn-danger btn-block" type="button"><i class="fa fa-trash"></i> Delete Block</button>
 		</div>
 		@endif
+		<div class="form-group">
+			<button onclick="" class="btn btn-success btn-block" type="button"><i class="fa fa-upload"></i> Upload Images</button>
+		</div>
 		<div class="form-group">
 			<button class="btn btn-primary btn-block" type="submit"><i class="fa fa-check"></i> Save Block</button>
 		</div>
