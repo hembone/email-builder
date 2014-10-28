@@ -13,13 +13,29 @@ class MainController extends BaseController {
 		View::share('title', 'Manage');
 		$data['success'] = Session::get('success', false);
 		$data['fail'] = Session::get('fail', false);
+		$data['categories'] = Category::orderBy('name')->get();
+		$data['brands'] = Brand::orderBy('name')->get();
 		return View::make('manage', $data);
 	}
 
 	public function postBlocks()
 	{
-		$blocks = Block::orderBy('name')->get();
-		echo json_encode($blocks);
+		$blocks = new Block;
+		if(Input::get('filters.name'))
+		{
+			$name = Input::get('filters.name');
+			$blocks = $blocks->where('name', 'LIKE', "%$name%");
+		}
+		if(Input::get('filters.category'))
+		{
+			$blocks = $blocks->where('category_id', Input::get('filters.category'));
+		}
+		if(Input::get('filters.brand'))
+		{
+			$blocks = $blocks->where('brand_id', Input::get('filters.brand'));
+		}
+		$blocks = $blocks->orderBy('name')->get();
+		echo $blocks;
 	}
 
 	public function getNewBlock()
