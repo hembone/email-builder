@@ -41,6 +41,8 @@ class MainController extends BaseController {
 	public function getNewBlock()
 	{
 		View::share('title', 'New Block');
+		$data['success'] = Session::get('success', false);
+		$data['fail'] = Session::get('fail', false);
 		$data['categories'] = Category::orderBy('name')->get();
 		$data['brands'] = Brand::orderBy('name')->get();
 		return View::make('edit-block', $data);
@@ -49,6 +51,8 @@ class MainController extends BaseController {
 	public function getEditBlock($id)
 	{
 		View::share('title', 'Edit Block');
+		$data['success'] = Session::get('success', false);
+		$data['fail'] = Session::get('fail', false);
 		$data['categories'] = Category::orderBy('name')->get();
 		$data['brands'] = Brand::orderBy('name')->get();
 		$data['block'] = Block::find($id);
@@ -68,7 +72,7 @@ class MainController extends BaseController {
 		$block->css = Input::get('css');
 		$block->code = Input::get('code');
 		$block->save();
-		return Redirect::to('/manage')->with('success', 'Block saved successfully!');
+		return Redirect::to('/edit-block/'.$block->id)->with('success', 'Block saved successfully!');
 	}
 
 	public function postDeleteBlock()
@@ -76,6 +80,21 @@ class MainController extends BaseController {
 		$block = Block::find(Input::get('delete_id'));
 		$block->delete();
 		return Redirect::to('/manage')->with('success', 'Block deleted successfully!');
+	}
+
+	public function postUpload($id)
+	{
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+		
+		$upload_path = './uploads/'.$id;
+		if(!file_exists($upload_path)) {
+			File::makeDirectory($upload_path);
+		}
+		Input::file('file')->move($upload_path, Input::file('file')->getClientOriginalName());
 	}
 
 	public function getCategories()

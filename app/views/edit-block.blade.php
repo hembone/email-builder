@@ -10,6 +10,19 @@
 
 <h3>{{ $title }}</h3>
 
+@if ($success)
+<div class="alert alert-success alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  {{ $success }}
+</div>
+@endif
+@if ($fail)
+<div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  {{ $fail }}
+</div>
+@endif
+
 <form id="new_block_form" role="form" method="post" action="edit-block">
 
 	<div class="col-md-8">
@@ -52,12 +65,18 @@
 		</div>
 		@if (isset($block))
 		<div class="form-group">
+			<div id="filelist"></div>
+			<div id="upload_box">
+				<button id="pickfiles" class="btn btn-default btn-block" type="button"><i class="fa fa-image"></i> Select Images</button>
+			</div>
+		</div>
+		<div class="form-group">
+			<button style="display:none;" id="uploadfiles" class="btn btn-success btn-block" type="button"><i class="fa fa-upload"></i> Upload Images</button>
+		</div>
+		<div class="form-group">
 			<button onclick="$('#confirm_modal').modal('show');" class="btn btn-danger btn-block" type="button"><i class="fa fa-trash"></i> Delete Block</button>
 		</div>
 		@endif
-		<div class="form-group">
-			<button onclick="" class="btn btn-success btn-block" type="button"><i class="fa fa-upload"></i> Upload Images</button>
-		</div>
 		<div class="form-group">
 			<button class="btn btn-primary btn-block" type="submit"><i class="fa fa-check"></i> Save Block</button>
 		</div>
@@ -94,13 +113,14 @@
 @section('scripts')
 
 {{ HTML::script('//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js'); }}
+{{ HTML::script('assets/js/plupload/plupload.full.min.js'); }}
 
 <script>
 
 $(function() {
 
 	BLOCK.init();
-
+	UPLOADER.init();
 	$('#edit_box').fadeIn();
 
 });
@@ -129,6 +149,54 @@ var BLOCK = {
     }
 
 };
+
+var UPLOADER = new plupload.Uploader({
+	runtimes : 'html5,flash,silverlight,html4',
+	browse_button : 'pickfiles', // you can pass in id...
+	container: document.getElementById('upload_box'), // ... or DOM Element itself
+	url : '/upload/{{ isset($block->id)?$block->id:'' }}',
+	flash_swf_url : 'assets/js/plupload/Moxie.swf',
+	silverlight_xap_url : 'assets/js/plupload/Moxie.xap',
+	
+	filters : {
+		max_file_size : '10mb',
+		mime_types: [
+			{title : "Image files", extensions : "jpg,gif,png"},
+			{title : "Zip files", extensions : "zip"}
+		]
+	},
+
+	init: {
+		PostInit: function() {
+			document.getElementById('filelist').innerHTML = '';
+
+			document.getElementById('uploadfiles').onclick = function() {
+				UPLOADER.start();
+				$('#uploadfiles').hide();
+				return false;
+			};
+		},
+
+		FilesAdded: function(up, files) {
+			$('#uploadfiles').show();
+			plupload.each(files, function(file) {
+				$('#filelist').html('<div id="'+file.id +'">'+file.name +' ('+plupload.formatSize(file.size)+') <b></b></div><div id="bar_'+file.id+'" class="progress_wrap"></div>');
+			});
+		},
+
+		UploadProgress: function(up, file) {
+			$('#bar_'+file.id).html('<span style="width:'+file.percent+'%;" class="progress_bar"></span>');
+		},
+
+		UploadComplete: function() {
+			$('#filelist').html('');
+		},
+
+		Error: function(up, err) {
+			console.log("Error #" + err.code + ": " + err.message);
+		}
+	}
+});
 
 </script>
 

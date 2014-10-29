@@ -39,6 +39,21 @@
 	border-radius: 4px;
 	height: 300px;
 }
+#filelist {
+	color: #666;
+	font-size: 0.9em;
+	padding-bottom: 10px;
+}
+.progress_wrap {
+	margin: 2px 0 6px 0;
+	height: 4px;
+	background: #eee;
+}
+.progress_bar {
+	display: block;
+	height: 4px;
+	background: #52b7f2;
+}
 
 /* Edit Categories */
 .category_box {
