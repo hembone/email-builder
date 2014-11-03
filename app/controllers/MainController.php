@@ -97,6 +97,23 @@ class MainController extends BaseController {
 		Input::file('file')->move($upload_path, Input::file('file')->getClientOriginalName());
 	}
 
+	public function postImages()
+	{
+		if(Input::get('block_id')) {
+			$path = './uploads/'.Input::get('block_id');
+			if(File::isDirectory($path)) {
+				$files = scandir($path);
+				$images = [];
+				foreach($files as $file) {
+					if($file!=='.' && $file!=='..') {
+						$images[] = $file;
+					}
+				}
+				echo json_encode($images);
+			}
+		}
+	}
+
 	public function getCategories()
 	{
 		View::share('title', 'Edit Categories');

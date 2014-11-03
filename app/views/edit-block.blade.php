@@ -80,6 +80,10 @@
 		<div class="form-group">
 			<button class="btn btn-primary btn-block" type="submit"><i class="fa fa-check"></i> Save Block</button>
 		</div>
+		<div id="library" class="form-group">
+
+
+		</div>
 	</div>
 
 </form>
@@ -128,45 +132,72 @@ $(function() {
 var BLOCK = {
 
     init : function() {
-        var cssAce = ace.edit("css_ace");
-        cssAce.setTheme("ace/theme/monokai");
-        cssAce.getSession().setMode("ace/mode/css");
-        cssAce.session.setUseWorker(false);
-        cssAce.setValue($('#css').val(), 1);
+        BLOCK.cssAce = ace.edit("css_ace");
+        BLOCK.cssAce.setTheme("ace/theme/monokai");
+        BLOCK.cssAce.getSession().setMode("ace/mode/css");
+        BLOCK.cssAce.session.setUseWorker(false);
+        BLOCK.cssAce.setValue($('#css').val(), 1);
 
-        var codeAce = ace.edit("code_ace");
-        codeAce.setTheme("ace/theme/monokai");
-        codeAce.getSession().setMode("ace/mode/html");
-        codeAce.session.setUseWorker(false);
-        codeAce.setValue($('#code').val(), 1);
+        BLOCK.codeAce = ace.edit("code_ace");
+        BLOCK.codeAce.setTheme("ace/theme/monokai");
+        BLOCK.codeAce.getSession().setMode("ace/mode/html");
+        BLOCK.codeAce.session.setUseWorker(false);
+        BLOCK.codeAce.setValue($('#code').val(), 1);
 
         $('#new_block_form').on('submit', function(event) {
-            var css = cssAce.getValue();
+            var css = BLOCK.cssAce.getValue();
             $('#css').val(css);
-            var code = codeAce.getValue();
+            var code = BLOCK.codeAce.getValue();
             $('#code').val(code);
         });
+
+        BLOCK.getImages();
+    }
+
+    ,getImages : function() {
+    	var blockId = '{{ isset($block->id)?$block->id:'' }}';
+		$.ajax({
+			type: 'post'
+			,url: '/images'
+			,dataType: 'json'
+			,data: {block_id:blockId}
+		}).done(function( res ) {
+			console.log(res);
+			BLOCK.displayImages(res);
+		});
+    }
+
+    ,displayImages : function(images) {
+		var html = '';
+		$.each(images, function(index, image) {
+			var image_div = '<div onclick="BLOCK.insertImage("'+image+'");">'+image+'</div>';
+			html += image_div;
+		});
+		$('#library').html(html);
+    }
+
+    ,insertImage : function(image) {
+    	BLOCK.codeAce.insert('<img height="" width="" alt="" href="./img/'+image+'">');
     }
 
 };
 
 var UPLOADER = new plupload.Uploader({
-	runtimes : 'html5,flash,silverlight,html4',
-	browse_button : 'pickfiles', // you can pass in id...
-	container: document.getElementById('upload_box'), // ... or DOM Element itself
-	url : '/upload/{{ isset($block->id)?$block->id:'' }}',
-	flash_swf_url : 'assets/js/plupload/Moxie.swf',
-	silverlight_xap_url : 'assets/js/plupload/Moxie.xap',
+	runtimes : 'html5,flash,silverlight,html4'
+	,browse_button : 'pickfiles' // you can pass in id...
+	,container: document.getElementById('upload_box') // ... or DOM Element itself
+	,url : '/upload/{{ isset($block->id)?$block->id:'' }}'
+	,flash_swf_url : 'assets/js/plupload/Moxie.swf'
+	,silverlight_xap_url : 'assets/js/plupload/Moxie.xap'
 	
-	filters : {
+	,filters : {
 		max_file_size : '10mb',
 		mime_types: [
-			{title : "Image files", extensions : "jpg,gif,png"},
-			{title : "Zip files", extensions : "zip"}
+			{title : "Image files", extensions : "jpg,gif,png"}
 		]
-	},
+	}
 
-	init: {
+	,init: {
 		PostInit: function() {
 			document.getElementById('filelist').innerHTML = '';
 
@@ -175,24 +206,25 @@ var UPLOADER = new plupload.Uploader({
 				$('#uploadfiles').hide();
 				return false;
 			};
-		},
+		}
 
-		FilesAdded: function(up, files) {
+		,FilesAdded: function(up, files) {
 			$('#uploadfiles').show();
 			plupload.each(files, function(file) {
-				$('#filelist').html('<div id="'+file.id +'">'+file.name +' ('+plupload.formatSize(file.size)+') <b></b></div><div id="bar_'+file.id+'" class="progress_wrap"></div>');
+				$('#filelist').append('<div id="'+file.id +'">'+file.name +' ('+plupload.formatSize(file.size)+') <b></b></div><div id="bar_'+file.id+'" class="progress_wrap"></div>');
 			});
-		},
+		}
 
-		UploadProgress: function(up, file) {
+		,UploadProgress: function(up, file) {
 			$('#bar_'+file.id).html('<span style="width:'+file.percent+'%;" class="progress_bar"></span>');
-		},
+		}
 
-		UploadComplete: function() {
+		,UploadComplete: function() {
 			$('#filelist').html('');
-		},
+			BLOCK.getImages();
+		}
 
-		Error: function(up, err) {
+		,Error: function(up, err) {
 			console.log("Error #" + err.code + ": " + err.message);
 		}
 	}

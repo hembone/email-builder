@@ -123,7 +123,7 @@ var MANAGE = {
 	get : function() {
 		$.ajax({
 			type: 'post'
-			,url: 'blocks'
+			,url: '/blocks'
 			,dataType: 'json'
 			,data: {filters:{name:$('#name').val(), category:$('#category').val(), brand:$('#brand').val()}}
 		}).done(function( res ) {
