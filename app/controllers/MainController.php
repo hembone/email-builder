@@ -100,13 +100,14 @@ class MainController extends BaseController {
 	public function postImages()
 	{
 		if(Input::get('block_id')) {
-			$path = './uploads/'.Input::get('block_id');
+			$path = './uploads/'.Input::get('block_id').'/';
 			if(File::isDirectory($path)) {
 				$files = scandir($path);
 				$images = [];
 				foreach($files as $file) {
 					if($file!=='.' && $file!=='..') {
-						$images[] = $file;
+						list($width, $height, $type, $attr) = getimagesize($path.$file);
+						$images[] = array('filename'=>$file, 'path'=>$path, 'width'=>$width, 'height'=>$height);
 					}
 				}
 				echo json_encode($images);

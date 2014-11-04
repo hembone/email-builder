@@ -132,11 +132,11 @@ $(function() {
 var BLOCK = {
 
     init : function() {
-        BLOCK.cssAce = ace.edit("css_ace");
-        BLOCK.cssAce.setTheme("ace/theme/monokai");
-        BLOCK.cssAce.getSession().setMode("ace/mode/css");
-        BLOCK.cssAce.session.setUseWorker(false);
-        BLOCK.cssAce.setValue($('#css').val(), 1);
+        cssAce = ace.edit("css_ace");
+        cssAce.setTheme("ace/theme/monokai");
+        cssAce.getSession().setMode("ace/mode/css");
+        cssAce.session.setUseWorker(false);
+        cssAce.setValue($('#css').val(), 1);
 
         BLOCK.codeAce = ace.edit("code_ace");
         BLOCK.codeAce.setTheme("ace/theme/monokai");
@@ -145,7 +145,7 @@ var BLOCK = {
         BLOCK.codeAce.setValue($('#code').val(), 1);
 
         $('#new_block_form').on('submit', function(event) {
-            var css = BLOCK.cssAce.getValue();
+            var css = cssAce.getValue();
             $('#css').val(css);
             var code = BLOCK.codeAce.getValue();
             $('#code').val(code);
@@ -163,21 +163,23 @@ var BLOCK = {
 			,data: {block_id:blockId}
 		}).done(function( res ) {
 			console.log(res);
-			BLOCK.displayImages(res);
+			BLOCK.images = res;
+			BLOCK.displayImages();
 		});
     }
 
-    ,displayImages : function(images) {
+    ,displayImages : function() {
 		var html = '';
-		$.each(images, function(index, image) {
-			var image_div = '<div onclick="BLOCK.insertImage("'+image+'");">'+image+'</div>';
+		$.each(BLOCK.images, function(index, image) {
+			var image_div = '<div onclick="BLOCK.insertImage(\''+index+'\');">'+image.filename+'</div>';
 			html += image_div;
 		});
 		$('#library').html(html);
     }
 
-    ,insertImage : function(image) {
-    	BLOCK.codeAce.insert('<img height="" width="" alt="" href="./img/'+image+'">');
+    ,insertImage : function(imageIndex) {
+    	var image = '<img height="'+BLOCK.images[imageIndex].height+'" width="'+BLOCK.images[imageIndex].width+'" alt="'+BLOCK.images[imageIndex].filename+'" src="'+BLOCK.images[imageIndex].path+BLOCK.images[imageIndex].filename+'">';
+    	BLOCK.codeAce.insert(image);
     }
 
 };
